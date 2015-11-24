@@ -30,23 +30,12 @@ LeKoala (<thomas@lekoala.be>)
 
 Requirements
 ------------
-* SilverStripe 3.1+
+* SilverStripe 3.2+
 
 Documentation
 -------------
-[GitHub](https://github.com/lekoala/silverstripe-invoice/wiki)
-
-Installation Instructions
--------------------------
-
-1. Place the files in a directory called invoice in the root of your SilverStripe installation
-2. Visit yoursite.com/dev/build to rebuild the database
-
-Usage Overview
---------------
-
-WIP
+[GitHub](https://github.com/lekoala/silverstripe-327/wiki)
 
 Known Issues
 ------------
-[Issue Tracker](https://github.com/lekoala/silverstripe-invoice/issues)
+[Issue Tracker](https://github.com/lekoala/silverstripe-327/issues)
