@@ -1,0 +1,26 @@
+{
+	"name": "lekoala/silverstripe-327",
+	"description": "PHP7 module for Silverstripe 3.2",
+	"type": "silverstripe-module",
+	"homepage": "https://github.com/lekoala/silverstripe-327",
+	"keywords": ["silverstripe", "PHP7"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "LeKoala",
+			"email": "thomas@lekoala.be"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/lekoala/silverstripe-327/issues"
+	},
+	"require": {
+		"silverstripe/framework": "~3.2"
+	},
+	"extra": {
+		"screenshots": [
+			""
+		],
+		"installer-name": "327"
+	}
+}

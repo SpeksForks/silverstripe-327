@@ -1,0 +1,8 @@
+---
+Name: 327
+---
+Injector:
+  Int:
+    class: DBInt
+  Float:
+    class: DBFloat
