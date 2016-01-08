@@ -3,12 +3,12 @@
 
 $v = phpversion();
 if (strpos($v, '7') !== 0) {
-    throw new Exception("You need to run PHP7");
+    echo("!!! You are not running PHP7 !!!\n\n");
 }
 
 if (php_sapi_name() == 'cli') {
 
-} else if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
+} else if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
     // Keep in mind that REMOTE_ADDR can be spoofed so it's just extra security
 } else {
     throw new Exception("This script can only be run locally");
@@ -36,7 +36,13 @@ $rename = [
     '/framework/model/connect/DBSchemaManager.php' => [
         '$spec = $this->$spec[\'type\']($spec[\'parts\'], true);' => '$spec = $this->{$spec[\'type\']}($spec[\'parts\'], true);',
         '$spec_orig = $this->$spec_orig[\'type\']($spec_orig[\'parts\']);' => '$spec_orig = $this->{$spec_orig[\'type\']}($spec_orig[\'parts\']);',
-    ]
+    ],
+    '/framework/view/SSViewer.php' => [
+        '$obj = new $casting($property);' => '$obj = Injector::inst()->get($casting, false, array($property));',
+    ],
+    '/framework/view/ViewableData.php' => [
+        'return Config::inst()->get($class, \'escape_type\', Config::FIRST_SET);' => 'return Injector::inst()->get($class, true)->config()->escape_type;',
+    ],
 ];
 
 echo "Updating your current setup to support PHP7\n";
@@ -49,7 +55,7 @@ foreach ($rename as $file => $opts) {
         throw new Exception("$filename does not exists");
     }
 
-    if(!is_writable($filename)) {
+    if (!is_writable($filename)) {
         throw new Exception("$filename is not writable");
     }
 
@@ -76,6 +82,37 @@ foreach ($rename as $file => $opts) {
         echo "Failed to update $file\n";
     }
 }
+
+// Remove simpletest
+function delete_dir($dirPath)
+{
+    if (!is_dir($dirPath)) {
+        throw new InvalidArgumentException("$dirPath must be a directory");
+    }
+    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+        $dirPath .= '/';
+    }
+    $files = glob($dirPath.'*', GLOB_MARK);
+    foreach ($files as $file) {
+        if (is_dir($file)) {
+            delete_dir($file);
+        } else {
+            unlink($file);
+        }
+    }
+    rmdir($dirPath);
+}
+if (is_dir($base_dir.'/framework/thirdparty/simpletest')) {
+    delete_dir($base_dir.'/framework/thirdparty/simpletest');
+    echo "Deleted simpletests dir\n";
+}
+
+// Replace diff
+$diffdest = $base_dir.'/framework/core/Diff.php';
+unlink($diffdest);
+copy(__DIR__ . '/files/Diff.php',$diffdest);
+echo "Replace diff class\n";
+
 
 echo str_repeat('*', 60)."\n";
 echo "All done! Run a /dev/build to put everything in order!";
